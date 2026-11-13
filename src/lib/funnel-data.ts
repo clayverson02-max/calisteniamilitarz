@@ -1,4 +1,5 @@
-export const CHECKOUT_URL = "https://pay.hotmart.com/C104688609X?checkoutMode=10";
+// Plano principal — é o único oferecido no funil.
+export const CHECKOUT_URL = "https://pay.hotmart.com/L108486884A?checkoutMode=10";
 export const VSL_ID = "498sx1kb25";
 export const VSL_POSTER = "https://cdn.vslwave.site/v/498sx1kb25/rmw9jq37r/poster.jpg";
 

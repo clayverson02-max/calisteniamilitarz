@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { CHECKOUT_URL } from "@/lib/funnel-data";
+import { track } from "@/lib/pixel";
+
+// Todo clique de compra avisa o pixel antes de sair da página.
+const aoComprar = () => track("InitiateCheckout", { value: 7.9, currency: "USD" });
 
 const Cta = ({ children }: { children: React.ReactNode }) => (
-  <a href={CHECKOUT_URL} className="bg-cta block w-full rounded-xl py-4 text-center text-lg font-black uppercase text-accent-foreground shadow-lg transition-transform hover:scale-[1.02]">{children}</a>
+  <a href={CHECKOUT_URL} onClick={aoComprar} className="bg-cta block w-full rounded-xl py-4 text-center text-lg font-black uppercase text-accent-foreground shadow-lg transition-transform hover:scale-[1.02]">{children}</a>
 );
 
 function StickyBar() {
@@ -22,7 +26,7 @@ function StickyBar() {
           <p className="font-black">⚡ HAS SIDO SELECCIONADO PARA EL RECLUTAMIENTO</p>
           <p className="text-muted-foreground">Tu plaza se reservará por: <span className="font-bold text-accent">{String(Math.floor(left / 60)).padStart(2, "0")}:{String(left % 60).padStart(2, "0")}</span></p>
         </div>
-        <a href={CHECKOUT_URL} className="bg-cta rounded-lg px-4 py-3 text-xs font-black text-accent-foreground">👊 ACCEDER</a>
+        <a href={CHECKOUT_URL} onClick={aoComprar} className="bg-cta rounded-lg px-4 py-3 text-xs font-black text-accent-foreground">👊 ACCEDER</a>
       </div>
     </div>
   );
@@ -77,6 +81,7 @@ const faqs = [
 export function Sales({ hideFace }: { hideFace: boolean }) {
   useEffect(() => {
     window.scrollTo(0, 0);
+    track("ViewContent", { content_name: "pagina_de_oferta" });
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.remove("opacity-0", "translate-y-10"); io.unobserve(e.target); } }), { threshold: 0.1 });
     document.querySelectorAll("[data-animate]").forEach((el) => { el.classList.add("opacity-0", "translate-y-10", "transition-all", "duration-1000"); io.observe(el); });
     return () => io.disconnect();
@@ -107,7 +112,7 @@ export function Sales({ hideFace }: { hideFace: boolean }) {
             </div>
             <p className="mb-4 text-sm font-bold">♾️ Acceso Vitalicio</p>
             <ul className="mb-6 space-y-2">{features.map(([i, t]) => <li key={t} className="flex gap-3 text-sm"><span>{i}</span><span>{t}</span></li>)}</ul>
-            <a href={CHECKOUT_URL} className="bg-cta flex items-center justify-center gap-2 rounded-xl py-4 text-lg font-black text-accent-foreground">INICIAR MISIÓN <ArrowRight className="h-5 w-5" /></a>
+            <a href={CHECKOUT_URL} onClick={aoComprar} className="bg-cta flex items-center justify-center gap-2 rounded-xl py-4 text-lg font-black text-accent-foreground">INICIAR MISIÓN <ArrowRight className="h-5 w-5" /></a>
             <p className="mt-3 text-center text-[10px] text-muted-foreground">🔒 SSL SECURE</p>
           </div>
         </div>
