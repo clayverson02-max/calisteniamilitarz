@@ -106,6 +106,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      // sem este, o navegador só abre a conexão com o gstatic depois de ler o
+      // CSS da fonte, e a primeira pintura espera os dois saltos
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&display=swap" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://connect.facebook.net" },
