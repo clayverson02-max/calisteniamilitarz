@@ -94,8 +94,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Calistenia Militar — 350 Exercícios" },
-      { name: "description", content: "350 exercícios organizados por dia e grupo muscular. Treine em casa ou ao ar livre." },
+      { title: "Guia Visual de Reparação de Eletrodomésticos" },
+      { name: "description", content: "Guia digital ilustrado de eletrodomésticos: componentes, sintomas e diagnóstico organizado." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

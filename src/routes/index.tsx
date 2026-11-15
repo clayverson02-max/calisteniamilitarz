@@ -1,81 +1,78 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { track } from '@/lib/pixel';
-import '../br-sales.css';
+import '../eletro-sales.css';
 
-// Configurar com a URL real da oferta Cakto antes de publicar esta versão.
-const CHECKOUTS: Record<'basic' | 'complete', string> = { basic: '', complete: '' };
-const PRICE = 29.90;
+// Preencher quando o produtor enviar a oferta brasileira da Cakto.
+const CHECKOUT_URL: string = '';
+const PRICE_BRL: number | null = null;
+const samples = [
+  { id: 'lavadora', label: 'Lavadoras', title: 'Não centrifuga. Por onde começar?', detail: 'Programa, carga, tampa e saída de água: organize as observações antes de suspeitar de uma peça.', category: 'Lavanderia' },
+  { id: 'geladeira', label: 'Geladeiras', title: 'Não está gelando como deveria?', detail: 'Ajuste, circulação de ar e vedação aparecem lado a lado para facilitar a consulta.', category: 'Refrigeração' },
+  { id: 'forno', label: 'Fornos elétricos', title: 'Liga, mas não aquece?', detail: 'Entenda o que observar nos controles e na câmara antes de uma avaliação interna.', category: 'Cozinha' },
+  { id: 'microondas', label: 'Micro-ondas', title: 'O painel acende. E agora?', detail: 'Confira comandos e sinais externos, com limites claros para não se expor à alta tensão.', category: 'Cozinha' },
+  { id: 'liquidificador', label: 'Liquidificadores', title: 'De onde vem esse vazamento?', detail: 'Copo, tampa, vedação e base: uma sequência visual para localizar e registrar o sintoma.', category: 'Pequenos aparelhos' },
+  { id: 'multimetro', label: 'Multímetro', title: 'Entenda antes de medir.', detail: 'Visor, função e entradas das pontas em um exemplo didático de baixa tensão.', category: 'Fundamentos' },
+];
+const faq = [
+  ['O que é o Guia Visual de Reparação?', 'É uma proposta de manual digital ilustrado para estudar componentes, reconhecer sintomas e organizar o diagnóstico inicial de eletrodomésticos. As páginas demonstrativas desta página mostram o formato editorial. O material completo está em preparação e a venda ainda não está liberada.'],
+  ['Vou receber um livro físico?', 'Não. O formato da entrega é um arquivo digital em PDF, para consultar no celular, tablet ou computador. Não há envio de material físico.'],
+  ['É indicado para quem está começando?', 'A linguagem é voltada a estudantes e iniciantes. O guia diferencia observação externa, cuidados de uso e intervenções técnicas. Ele não substitui formação, manual do fabricante ou supervisão profissional.'],
+  ['Serve para qualquer marca e modelo?', 'Os diagramas são conceituais. Componentes, códigos, valores de teste e procedimentos variam por modelo. Sempre consulte a documentação específica do fabricante antes de uma intervenção.'],
+  ['O guia ensina a abrir micro-ondas?', 'Não. Em micro-ondas, a orientação ao iniciante se limita a comandos e verificações externas. O equipamento pode manter alta tensão mesmo desligado da tomada; reparos internos são destinados à assistência qualificada.'],
+  ['O guia de câmeras está incluído?', 'Não. O Guia Visual de Instalação de Câmeras de Segurança é um produto adicional, opcional e cobrado separadamente se estiver disponível e for escolhido no checkout.'],
+  ['Já posso comprar?', 'O checkout brasileiro está sendo configurado pelo produtor. Assim que preço, conteúdo final e pagamento estiverem prontos, o botão de compra será habilitado.'],
+];
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
-    { title: 'Calistenia Militar | 350 exercícios e sua rotina organizada' },
-    { name: 'description', content: 'Pare de improvisar seu treino. 350 exercícios de calistenia organizados por dia e grupo muscular, no celular, computador ou tablet. R$ 29,90.' },
-    { property: 'og:title', content: 'Calistenia Militar — seu próximo treino já tem direção' },
-    { property: 'og:description', content: '350 exercícios. Rotina organizada. Treine em casa ou ao ar livre.' },
-  ] }), component: BrasilSales,
+    { title: 'Guia Visual de Reparação de Eletrodomésticos | Manual ilustrado' },
+    { name: 'description', content: 'Entenda os componentes, reconheça sintomas e organize o diagnóstico. Conheça as páginas ilustradas do guia de eletrodomésticos em português.' },
+    { property: 'og:title', content: 'O aparelho parou. Saiba por onde começar.' },
+    { property: 'og:description', content: 'Um guia visual de eletrodomésticos: componentes, sintomas e diagnóstico organizado. Conheça o material por dentro.' },
+    { property: 'og:image', content: 'https://calisteniamilitarz.lovable.app/guia/capa-checkout.webp' },
+  ] }), component: EletroSales,
 });
-
-function CheckoutButton({ label = 'QUERO O PLANO COMPLETO', plan = 'complete' }: { label?: string; plan?: 'basic' | 'complete' }) {
-  const checkoutUrl = CHECKOUTS[plan];
-  const price = plan === 'basic' ? 12.90 : 29.90;
-  const go = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!checkoutUrl) return;
-    try {
-      const url = new URL(checkoutUrl);
-      const params = new URLSearchParams(window.location.search);
-      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','src','sck','fbclid'].forEach(key => {
-        const value = params.get(key); if (value) url.searchParams.set(key, value);
-      });
-      event.currentTarget.href = url.toString();
-    } catch { /* O link original continua disponível. */ }
-    track('InitiateCheckout', { content_name: `Calistenia Militar BR - ${plan}`, currency: 'BRL', value: price });
+export function EletroSales() {
+  const [active, setActive] = useState(0);
+  const [category, setCategory] = useState('Todos');
+  const dialog = useRef<HTMLDialogElement>(null);
+  useEffect(() => { track('ViewContent', { content_name: 'Guia Visual de Reparação de Eletrodomésticos', content_category: 'Manual digital', currency: 'BRL' }); }, []);
+  function openSample(index: number) { setActive(index); dialog.current?.showModal(); }
+  const categories = ['Todos', ...new Set(samples.map(s => s.category))];
+  const buy = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!CHECKOUT_URL) return;
+    const url = new URL(CHECKOUT_URL);
+    const query = new URLSearchParams(window.location.search);
+    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','src','sck','fbclid'].forEach(key => { const value = query.get(key); if(value) url.searchParams.set(key, value); });
+    event.currentTarget.href = url.toString();
+    track('InitiateCheckout', { content_name: 'Guia Visual de Reparação de Eletrodomésticos', currency: 'BRL', ...(PRICE_BRL !== null ? { value: PRICE_BRL } : {}) });
   };
-  return <a className="br-cta" href={checkoutUrl || '#oferta'} onClick={go}>{label}<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>;
-}
-
-const benefits = [
-  ['01', 'Abra o treino do dia', 'Uma rotina organizada para você parar de perder tempo decidindo por onde começar.'],
-  ['02', 'Confira como fazer', 'Consulte os exercícios e as orientações de execução, quantidade, tempo e descanso.'],
-  ['03', 'Coloque em prática', 'Treine em casa ou ao ar livre, respeitando seu nível e a estrutura necessária para cada movimento.'],
-];
-const areas = [ ['Peito', 'chest'], ['Braços', 'brazos'], ['Abdômen', 'abdomen'], ['Pernas', 'piernas'] ];
-const faq = [
-  ['Qual é a diferença entre os planos?', 'O Básico custa R$ 12,90 e inclui somente os exercícios. O Completo custa R$ 29,90 e libera todos os entregáveis do programa: exercícios, rotinas organizadas, orientações de execução, séries, tempo e descanso, conteúdo sobre alimentação e o bônus Cross Operacional.'],
-  ['O que vem no bônus Cross Operacional?', 'Incluído exclusivamente no Plano Completo: uma tabela visual complementar, com quatro séries de intensidade, imagens dos movimentos e tempos ou repetições. É um documento de consulta e não uma avaliação física nem um plano individual.'],
-  ['Preciso fazer um quiz para acessar?', 'Não. Você conhece o programa nesta página e vai direto para a compra.'],
-  ['É um aplicativo para instalar?', 'O produto é uma plataforma digital acessível pelo celular, computador ou tablet. Você recebe as instruções de acesso após a confirmação do pagamento.'],
-  ['São 350 treinos ou 350 exercícios?', 'São 350 exercícios de calistenia organizados na plataforma, com rotinas por dia e grupo muscular. Exercícios são os movimentos que compõem cada treino.'],
-  ['Preciso de academia?', 'Há exercícios para casa e para espaços ao ar livre. Alguns movimentos podem exigir barra ou apoio adequado; confira as instruções e a estrutura necessária antes de começar.'],
-  ['Vou receber um treino individual ou atendimento de um profissional?', 'A proposta apresentada aqui é acesso ao conteúdo e às rotinas organizadas da plataforma. Isso não substitui avaliação ou orientação individual de um profissional.'],
-  ['Em quanto tempo vou ter resultados?', 'Não há prazo garantido. Os resultados variam conforme seu ponto de partida, regularidade, recuperação, alimentação e condições individuais.'],
-  ['O programa é oficial das Forças Armadas?', 'Não é apresentado como produto oficial ou endossado por uma instituição militar. A identidade militar representa o foco em disciplina e constância.'],
-];
-export function BrasilSales() {
-  useEffect(() => { track('ViewContent', {content_name: 'Calistenia Militar BR', currency:'BRL', value:PRICE}); }, []);
-  return <main className="br-page">
-    <div className="br-top">350 EXERCÍCIOS • PLATAFORMA EM PORTUGUÊS</div>
-    <header className="br-nav br-wrap"><a href="#" className="br-brand"><span aria-hidden="true">≋</span> CALISTENIA<span>MILITAR</span></a><a href="#conteudo">Conheça o programa ↓</a></header>
-    <section className="br-hero br-wrap">
-      <div className="br-hero-copy"><p className="br-eyebrow">SUA ROTINA COMEÇA COM UMA DECISÃO</p>
-      <h1>Pare de improvisar.<br/><em>Comece a treinar com direção.</em></h1>
-      <p className="br-lead">350 exercícios de calistenia em uma plataforma organizada por dia e grupo muscular. Abra no celular, encontre seu treino e coloque sua rotina em movimento.</p>
-      <div className="br-tags"><span>Em casa ou ao ar livre</span><span>Celular, tablet e computador</span></div>
-      <a className="br-cta" href="#oferta">COMPARAR OS PLANOS →</a><p className="br-micro">Básico: R$ 12,90 · <strong>Completo + bônus: R$ 29,90</strong></p></div>
-      <div className="br-hero-art"><span className="br-art-label">DISCIPLINA EM MOVIMENTO</span><img src="/assets/athletic.webp" alt="Ilustração de condicionamento físico, sem promessa de resultado" width="600" height="750" fetchPriority="high"/><div className="br-count"><strong>350</strong><span>exercícios.<br/>Uma rotina com direção.</span></div></div>
+  return <main className="ev-page">
+    <div className="ev-top">EDIÇÃO EM PORTUGUÊS <span>•</span> GUIA DIGITAL ILUSTRADO</div>
+    <header className="ev-wrap ev-nav"><a className="ev-brand" href="#inicio"><span className="ev-brand-symbol" aria-hidden="true">＋</span>GUIA VISUAL<span className="ev-brand-sub">ELETRODOMÉSTICOS</span></a><a href="#por-dentro">Veja por dentro <span aria-hidden="true">↓</span></a></header>
+    <section id="inicio" className="ev-hero ev-wrap">
+      <p className="ev-kicker">MENOS TENTATIVA. MAIS COMPREENSÃO.</p>
+      <h1>O aparelho parou.<br/><em>Saiba por onde começar.</em></h1>
+      <p className="ev-lead">Reconheça componentes, entenda os sintomas e organize o diagnóstico com um <strong>guia visual de reparação de eletrodomésticos.</strong> Imagens, diagramas e explicações que você pode consultar de novo.</p>
+      <div className="ev-hero-books" aria-label="Capa e páginas demonstrativas do guia"><img className="ev-sheet ev-sheet-left" src="/guia/lavadora.svg" alt="Página demonstrativa sobre lavadora que não centrifuga" width="900" height="1200"/><img className="ev-main-cover" src="/guia/capa-checkout.webp" alt="Capa: Guia Visual de Reparação de Eletrodomésticos" width="1000" height="1000" fetchPriority="high"/><img className="ev-sheet ev-sheet-right" src="/guia/geladeira.svg" alt="Página demonstrativa sobre geladeira que não resfria" width="900" height="1200"/></div>
+      <a className="ev-cta" href="#por-dentro">QUERO VER O GUIA POR DENTRO <span aria-hidden="true">↓</span></a>
+      <p className="ev-caption">Prévia editorial • Diagramas próprios • Consulta por aparelho e sintoma</p>
     </section>
-    <div className="br-ribbon"><span>ESCOLHA O DIA</span><b>→</b><span>CONSULTE OS EXERCÍCIOS</span><b>→</b><span>COMECE O TREINO</span></div>
-    <section className="br-section br-wrap br-split"><div><p className="br-eyebrow">CHEGA DE TREINAR NO IMPROVISO</p><h2>Salvar exercícios é fácil.<br/><em>Ter uma rotina muda o jogo.</em></h2></div><div><p>Um vídeo de flexão hoje. Um treino aleatório amanhã. E, quando chega a hora de treinar, você volta a procurar o que fazer.</p><p>A Calistenia Militar reúne os exercícios e a organização no mesmo lugar. Você dedica menos tempo à procura e mais atenção à execução e à constância.</p><p className="br-punch">Você não precisa de mais uma pasta de vídeos soltos. Precisa saber qual é o próximo passo.</p></div></section>
-    <section id="conteudo" className="br-section br-light"><div className="br-wrap"><p className="br-eyebrow">TUDO O QUE O PLANO COMPLETO ENTREGA</p><h2>Seu treino deixa de ser<br/>uma lista de dúvidas.</h2><div className="br-steps">{benefits.map(([n,title,text])=><article key={n}><span>{n}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
-      <div className="br-content-grid"><article><h3>350 exercícios organizados</h3><p>Uma biblioteca de movimentos distribuídos por grupo muscular para consultar dentro da plataforma.</p></article><article><h3>Rotina por dia</h3><p>Localize o dia de treino e veja os exercícios que fazem parte da sua rotina.</p></article><article><h3>Execução, séries e descanso</h3><p>Orientações de como realizar os movimentos, com quantidade, tempo e intervalos indicados no conteúdo.</p></article><article><h3>Conteúdo sobre alimentação</h3><p>Informações educativas para apoiar seus hábitos. Necessidades e planos alimentares individuais exigem orientação profissional.</p></article></div>
-    </div></section>
-    <section className="br-section br-wrap"><p className="br-eyebrow">ENCONTRE O FOCO DO SEU TREINO</p><h2>Uma biblioteca.<br/><em>Diferentes grupos musculares.</em></h2><div className="br-areas">{areas.map(([title,img])=><article key={title}><img src={`/assets/zones/${img}.webp`} alt={`Ilustração da região: ${title}`} width="400" height="500" loading="lazy"/><h3>{title}</h3></article>)}</div><p className="br-caption">Imagens ilustrativas dos grupos musculares. Consulte os movimentos e as instruções dentro da plataforma.</p></section>
-    <section className="br-section br-panel"><div className="br-wrap br-split"><div><p className="br-eyebrow">TREINO QUE ACOMPANHA A SUA ROTINA</p><h2>Em casa.<br/>No parque.<br/><em>Onde você puder começar.</em></h2></div><div><p>A proposta da calistenia é trabalhar com o peso do próprio corpo. A plataforma ajuda você a encontrar os exercícios e seguir uma organização.</p><ul className="br-checks"><li>Consulte o conteúdo no celular durante o treino.</li><li>Use o computador ou tablet para organizar sua rotina.</li><li>Confira o espaço e os equipamentos exigidos pelo exercício.</li><li>Respeite seu nível, os intervalos e a recuperação.</li></ul><a className="br-text-link" href="#oferta">Ver tudo que está incluído →</a></div></div></section>
-    <section className="br-section br-light br-bonus"><div className="br-wrap br-split"><div className="br-bonus-preview"><img src="/assets/bonus/cross-operacional.jpg" alt="Prévia real da tabela Cross Operacional: séries verde, amarela, azul e vermelha" width="592" height="1100" loading="lazy"/><span>PRÉVIA DO MATERIAL INCLUÍDO</span></div><div><p className="br-eyebrow">BÔNUS EXCLUSIVO DO PLANO COMPLETO</p><h2>Cross Operacional.<br/>Quatro séries em um painel visual.</h2><p>No Plano Completo, além de todos os entregáveis da plataforma, receba a tabela de consulta Cross Operacional: movimentos ilustrados, tempos e repetições apresentados lado a lado.</p><div className="br-series"><span>Verde</span><span>Amarela</span><span>Azul</span><span>Vermelha</span></div><ul className="br-bonus-list"><li>Compare as quatro séries de intensidade.</li><li>Veja as imagens que acompanham os movimentos.</li><li>Consulte os tempos e as quantidades indicados no documento.</li></ul><p className="br-bonus-note">Material complementar de consulta, não uma prescrição individual. As séries incluem movimentos intensos e avançados: a escolha e adaptação devem considerar seu condicionamento e orientação profissional.</p><p className="br-bonus-credit">O documento fornecido identifica a Escola de Educação Física do Exército. Sua inclusão não representa vínculo ou endosso institucional ao programa.</p><a className="br-text-link" href="#oferta">Quero o programa com o bônus →</a></div></div></section>
-    <section id="oferta" className="br-section br-wrap br-plans-section"><div className="br-plans-heading"><p className="br-eyebrow">ESCOLHA SEU ACESSO</p><h2>Exercícios para começar.<br/><em>O programa completo para ir além.</em></h2><p>Por <strong>R$ 17 a mais</strong>, o Plano Completo reúne todos os entregáveis do programa e o bônus Cross Operacional.</p></div><div className="br-plans-grid">
-      <article className="br-offer br-complete"><div className="br-plan-badge">ACESSO A TODOS OS ENTREGÁVEIS + BÔNUS</div><div className="br-offer-label">A EXPERIÊNCIA COMPLETA</div><h3>Plano Completo</h3><p>Exercícios, organização e conteúdo complementar no mesmo acesso.</p><ul className="br-checks"><li>350 exercícios de calistenia</li><li>Rotinas organizadas por dia e grupo muscular</li><li>Orientações de execução, séries, tempo e descanso</li><li>Rotinas para casa ou ao ar livre</li><li>Conteúdo educativo sobre alimentação</li><li>Acesso pelo celular, tablet e computador</li><li><strong>Bônus exclusivo: Cross Operacional</strong></li></ul><div className="br-plan-price"><p className="br-price-label">Pagamento único</p><p className="br-price"><small>R$</small>29<span>,90</span></p><CheckoutButton plan="complete" label="QUERO TUDO + O BÔNUS"/><p className="br-micro">{CHECKOUTS.complete ? 'Checkout seguro da Cakto · Plano Completo' : 'Checkout em configuração. Compra ainda indisponível.'}</p></div></article>
-      <article className="br-offer br-basic"><div className="br-offer-label">SOMENTE OS EXERCÍCIOS</div><h3>Plano Básico</h3><p>Para quem quer acessar apenas a biblioteca de exercícios.</p><ul className="br-checks"><li>350 exercícios de calistenia</li></ul><div className="br-plan-exclusions"><p>Este plano não inclui:</p><ul><li>Rotinas organizadas e materiais complementares do Completo</li><li>Conteúdo sobre alimentação</li><li>Bônus Cross Operacional</li></ul></div><div className="br-plan-price"><p className="br-price-label">Pagamento único</p><p className="br-price"><small>R$</small>12<span>,90</span></p><CheckoutButton plan="basic" label="QUERO SOMENTE OS EXERCÍCIOS"/><p className="br-micro">{CHECKOUTS.basic ? 'Checkout seguro da Cakto · Plano Básico' : 'Checkout em configuração. Compra ainda indisponível.'}</p></div></article>
-    </div></section>
-    <section className="br-section br-light"><div className="br-wrap br-faq"><p className="br-eyebrow">ANTES DE COMEÇAR</p><h2>Respostas diretas.</h2>{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div></section>
-    <footer className="br-wrap br-footer"><strong>CALISTENIA MILITAR</strong><p>Conteúdo educativo para adultos. Os resultados variam. Adapte a prática às suas condições e procure orientação profissional quando necessário. Conteúdo sobre alimentação não substitui acompanhamento nutricional individual.</p></footer>
+    <div className="ev-strip"><span>COMPONENTES IDENTIFICADOS</span><span>SEQUÊNCIA DE OBSERVAÇÃO</span><span>LIMITES DE SEGURANÇA</span></div>
+    <section className="ev-section ev-white"><div className="ev-wrap ev-split"><div><p className="ev-kicker">ANTES DE TROCAR UMA PEÇA</p><h2>Primeiro, entenda<br/><em>o que o sintoma está dizendo.</em></h2></div><div className="ev-copy"><p>A lavadora não centrifuga. A geladeira não resfria. O aparelho liga, mas não funciona como deveria.</p><p>O mesmo sintoma pode ter causas diferentes. Sair desmontando ou trocar uma peça por palpite pode deixar a dúvida ainda maior.</p><p className="ev-highlight">O guia foi pensado para organizar o começo: o que observar, o que registrar e quando parar para uma avaliação técnica.</p></div></div></section>
+    <section id="por-dentro" className="ev-section ev-pale"><div className="ev-wrap"><div className="ev-section-head"><p className="ev-kicker">VEJA O FORMATO DO MATERIAL</p><h2>Abra uma página.<br/>Veja a diferença de aprender visualmente.</h2><p>Toque nas prévias para ampliar. São páginas demonstrativas criadas para esta edição, com desenhos, orientação de leitura e cuidados específicos.</p></div><div className="ev-filters" aria-label="Filtrar prévias">{categories.map(c=><button key={c} aria-pressed={category===c} onClick={()=>setCategory(c)}>{c}</button>)}</div><div className="ev-samples">{samples.map((s,i)=>(category==='Todos'||s.category===category)&&<article className="ev-sample" key={s.id}><button className="ev-preview-button" onClick={()=>openSample(i)} aria-label={`Ampliar página: ${s.label}`}><img src={`/guia/${s.id}.svg`} alt={`Prévia de ${s.label}: ${s.title}`} width="900" height="1200" loading="lazy"/><span>AMPLIAR PÁGINA <b aria-hidden="true">＋</b></span></button><div className="ev-sample-copy"><p className="ev-kicker">{s.label}</p><h3>{s.title}</h3><p>{s.detail}</p></div></article>)}</div></div></section>
+    <section className="ev-section ev-navy"><div className="ev-wrap ev-split"><div className="ev-page-detail"><img src="/guia/lavadora.svg" alt="Diagrama com componentes da lavadora identificados por números" width="900" height="1200" loading="lazy"/></div><div><p className="ev-kicker">UMA ESTRUTURA FÁCIL DE CONSULTAR</p><h2>Você vê.<br/>Você entende.<br/><em>Você organiza o próximo passo.</em></h2><ol className="ev-numbered"><li><span>01</span><div><h3>Localize o componente</h3><p>O desenho aproxima a explicação do aparelho e identifica os pontos de observação.</p></div></li><li><span>02</span><div><h3>Siga a sequência</h3><p>Blocos curtos ajudam a separar o sintoma, as condições de uso e os sinais encontrados.</p></div></li><li><span>03</span><div><h3>Entenda o limite</h3><p>Saiba o que a observação permite concluir e quais situações precisam de assistência qualificada.</p></div></li></ol><a className="ev-cta" href="#conteudo">VER O CONTEÚDO DO GUIA <span aria-hidden="true">↓</span></a></div></div></section>
+    <section id="conteudo" className="ev-section ev-white"><div className="ev-wrap"><div className="ev-section-head"><p className="ev-kicker">UM ÍNDICE QUE PARTE DO APARELHO</p><h2>Da lavanderia à cozinha.<br/>Encontre o assunto que precisa estudar.</h2></div><div className="ev-modules">
+      <article><span>01 / LAVANDERIA</span><h3>Lavadoras</h3><p>Funcionamento inicial, enchimento, drenagem, centrifugação, vazamentos e ruídos.</p><img src="/guia/lavadora.svg" alt="Página ilustrada de lavadoras" width="900" height="1200" loading="lazy"/></article>
+      <article><span>02 / REFRIGERAÇÃO</span><h3>Geladeiras</h3><p>Falta de resfriamento, gelo em excesso, umidade, vedação e sinais de funcionamento.</p><img src="/guia/geladeira.svg" alt="Página ilustrada de geladeiras" width="900" height="1200" loading="lazy"/></article>
+      <article><span>03 / COZINHA</span><h3>Fornos e micro-ondas</h3><p>Componentes, controles, observações externas e situações que exigem assistência.</p><img src="/guia/forno.svg" alt="Página ilustrada de forno elétrico" width="900" height="1200" loading="lazy"/></article>
+      <article><span>04 / FUNDAMENTOS</span><h3>Base do diagnóstico</h3><p>Segurança, introdução ao multímetro, identificação do modelo, peças e registro da avaliação.</p><img src="/guia/multimetro.svg" alt="Página ilustrada sobre o multímetro" width="900" height="1200" loading="lazy"/></article>
+    </div><div className="ev-small-appliances"><h3>E os aparelhos menores do dia a dia?</h3><p>O escopo do manual também contempla:</p><div>{['Liquidificadores','Batedeiras','Ferros de passar','Chaleiras elétricas','Ventiladores','Aspiradores','Air fryers','Cafeteiras','Secadores de cabelo'].map(a=><span key={a}>{a}</span>)}</div></div></div></section>
+    <section className="ev-section ev-pale"><div className="ev-wrap ev-split"><div><p className="ev-kicker">PARA ESTUDAR E VOLTAR A CONSULTAR</p><h2>O conhecimento fica<br/><em>ao alcance da sua mão.</em></h2><p>Um material digital para acompanhar seus estudos, organizar dúvidas e revisar a lógica da observação sem depender de lembrar de tudo.</p><ul className="ev-checks"><li>Estudantes que querem visualizar os componentes.</li><li>Técnicos iniciantes que buscam organizar o raciocínio.</li><li>Pessoas interessadas em conhecer melhor seus aparelhos.</li></ul><p className="ev-note">Material educativo. Não substitui treinamento técnico, documentação do modelo nem habilitação profissional.</p></div><div className="ev-device"><div className="ev-device-top">GUIA VISUAL <span>CONSULTA DIGITAL</span></div><img src="/guia/liquidificador.svg" alt="Exemplo de leitura da página sobre liquidificador em um dispositivo" width="900" height="1200" loading="lazy"/></div></div></section>
+    <section id="oferta" className="ev-section ev-navy"><div className="ev-wrap ev-offer"><img src="/guia/capa-checkout.webp" alt="Capa do manual de eletrodomésticos" width="1000" height="1000" loading="lazy"/><div><p className="ev-kicker">GUIA VISUAL DE REPARAÇÃO</p><h2>Entenda o aparelho.<br/><em>Comece pelo diagnóstico.</em></h2><ul className="ev-checks"><li>Material digital em português.</li><li>Diagramas e componentes identificados.</li><li>Consulta por equipamento e sintoma.</li><li>Explicações curtas e sequência de observação.</li><li>Cuidados e limites de segurança por categoria.</li></ul>{PRICE_BRL!==null&&<p className="ev-price">{new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(PRICE_BRL)}</p>}{CHECKOUT_URL?<a className="ev-cta" href={CHECKOUT_URL} onClick={buy}>QUERO ACESSAR O GUIA <span aria-hidden="true">→</span></a>:<div className="ev-pending"><strong>Em preparação para lançamento</strong><p>O material completo e o checkout estão sendo finalizados. Enquanto isso, conheça as prévias acima.</p><a href="#por-dentro">EXPLORAR AS PÁGINAS DEMONSTRATIVAS ↑</a></div>}<p className="ev-caption">Entrega prevista em PDF • Sem envio físico</p></div></div></section>
+    <section className="ev-section ev-white"><div className="ev-wrap ev-bump"><img src="/guia/cameras-checkout.webp" alt="Capa do produto adicional: Guia Visual de Instalação de Câmeras de Segurança" width="1000" height="1000" loading="lazy"/><div><p className="ev-kicker">CONTEÚDO ADICIONAL • OPCIONAL</p><h2>Quer estudar também<br/>instalação de câmeras?</h2><p>O Guia Visual de Instalação de Câmeras de Segurança aborda escolha de equipamentos, posicionamento, cabeamento, DVR e NVR, acesso remoto, gravações e manutenção.</p><p className="ev-note"><strong>Produto separado.</strong> Não está incluído no manual de eletrodomésticos. A opção e o valor serão apresentados no checkout, quando disponíveis.</p></div></div></section>
+    <section className="ev-section ev-pale"><div className="ev-wrap ev-faq"><p className="ev-kicker">ANTES DE DECIDIR</p><h2>Sem dúvidas sobre a entrega.</h2>{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">＋</span></summary><p>{a}</p></details>)}</div></section>
+    <footer className="ev-wrap ev-footer"><strong>GUIA VISUAL • ELETRODOMÉSTICOS</strong><p>Diagramas conceituais e conteúdo educativo. Procedimentos variam conforme fabricante e modelo. Não execute intervenções em circuitos energizados, sistemas de gás ou refrigeração sem capacitação adequada.</p></footer>
+    <dialog ref={dialog} className="ev-dialog" aria-label={`Página demonstrativa: ${samples[active]!.label}`} onClick={e=>{if(e.target===e.currentTarget)dialog.current?.close();}}><div className="ev-dialog-toolbar"><strong>{samples[active]!.label}</strong><button onClick={()=>dialog.current?.close()} aria-label="Fechar prévia">Fechar ×</button></div><img src={`/guia/${samples[active]!.id}.svg`} alt={`Página ampliada: ${samples[active]!.title}`} width="900" height="1200"/><div className="ev-dialog-nav"><button onClick={()=>setActive((active+samples.length-1)%samples.length)}>← Anterior</button><span>{active+1} / {samples.length}</span><button onClick={()=>setActive((active+1)%samples.length)}>Próxima →</button></div></dialog>
   </main>;
 }
