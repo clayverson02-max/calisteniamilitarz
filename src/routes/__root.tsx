@@ -109,7 +109,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // sem este, o navegador só abre a conexão com o gstatic depois de ler o
       // CSS da fonte, e a primeira pintura espera os dois saltos
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&display=swap" },
+      // Archivo: títulos pesados e corpo de alta legibilidade. Barlow segue
+      // carregado porque as páginas antigas do repositório ainda usam.
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Archivo+Black&family=Barlow:wght@400;500;700;900&display=swap" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://connect.facebook.net" },
     ],

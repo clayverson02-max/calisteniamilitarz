@@ -85,7 +85,14 @@ export function EletroSales() {
       <p className="ev-kicker">GUIA VISUAL • EDIÇÃO EM PORTUGUÊS</p>
       <h1>A máquina parou.<br/><em>E ninguém te explica por quê.</em></h1>
       <p className="ev-lead">O técnico cobra a visita só para olhar. Aí diz que <strong>não compensa consertar</strong> — e você troca o aparelho inteiro por causa de uma peça. Este guia mostra, em desenho, o que observar antes de gastar.</p>
-      <div className="ev-hero-books" aria-label="Capa e páginas demonstrativas do guia"><img className="ev-sheet ev-sheet-left" src="/guia/lavadora.svg" alt="Página demonstrativa sobre lavadora que não centrifuga" width="900" height="1200"/><img className="ev-main-cover" src="/guia/capa-checkout.webp" alt="Capa: Guia Visual de Reparação de Eletrodomésticos" width="1000" height="1000" fetchPriority="high"/><img className="ev-sheet ev-sheet-right" src="/guia/geladeira.svg" alt="Página demonstrativa sobre geladeira que não resfria" width="900" height="1200"/></div>
+      <div className="ev-hero-books" aria-label="Capa, páginas do guia e a leitura no celular">
+        <img className="ev-sheet ev-sheet-far-left" src="/guia/lavadora.svg" alt="Página do guia: lavadora que não centrifuga" width="900" height="1200" loading="eager"/>
+        <img className="ev-sheet ev-sheet-left" src="/guia/microondas.svg" alt="Página do guia: micro-ondas" width="900" height="1200" loading="eager"/>
+        <img className="ev-sheet ev-sheet-right" src="/guia/forno.svg" alt="Página do guia: forno elétrico" width="900" height="1200" loading="eager"/>
+        <img className="ev-sheet ev-sheet-far-right" src="/guia/geladeira.svg" alt="Página do guia: geladeira que não gela" width="900" height="1200" loading="eager"/>
+        <img className="ev-main-cover" src="/guia/capa-checkout.webp" alt="Capa: Guia Visual de Reparação de Eletrodomésticos" width="1000" height="1000" fetchPriority="high"/>
+        <div className="ev-hero-phone" aria-hidden="true"><span className="ev-hero-phone-notch"/><img src="/guia/multimetro.svg" alt="" width="900" height="1200" loading="eager"/></div>
+      </div>
       <p className="ev-caption">Diagramas próprios • Consulta por aparelho e por sintoma • PDF em português</p>
     </section>
     <div className="ev-strip"><span>COMPONENTES IDENTIFICADOS</span><span>SEQUÊNCIA DE OBSERVAÇÃO</span><span>LIMITES DE SEGURANÇA</span></div>

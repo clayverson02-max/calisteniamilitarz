@@ -49,3 +49,70 @@
 @media(prefers-reduced-motion:reduce){
  .ev-reveal,.ev-reveal-l,.ev-reveal-r{opacity:1!important;transform:none!important;transition:none}
 }
+
+/* ================= Tipografia: Archivo ================= */
+.ev-page{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;font-size:20px;line-height:1.62;
+ font-weight:500;-webkit-font-smoothing:antialiased}
+.ev-page h1,.ev-page h2,.ev-page h3{font-family:'Archivo Black',Archivo,Arial,sans-serif;
+ font-weight:400;letter-spacing:-.018em}
+.ev-page h1{font-size:clamp(44px,5.6vw,72px);line-height:1.04}
+.ev-page h2{font-size:clamp(33px,3.8vw,48px);line-height:1.08}
+.ev-page h3{font-size:26px;letter-spacing:-.012em}
+.ev-page strong,.ev-page b{font-weight:800}
+.ev-kicker,.ev-top,.ev-strip,.ev-cta,.ev-brand,.ev-modules article>span,
+.ev-preview-button>span,.ev-footer strong{font-family:Archivo,Arial,sans-serif;font-weight:800}
+.ev-cta{font-weight:900;font-size:18px;letter-spacing:.2px}
+.ev-lead{font-size:23px;line-height:1.5;font-weight:500}
+.ev-copy p,.ev-section-head>p:last-child{font-size:20px}
+.ev-checks li{font-size:19px}
+.ev-numbered p{font-size:19px}
+.ev-sample-copy>p:last-child,.ev-modules p,.ev-faq details p{font-size:18px;line-height:1.5}
+.ev-faq summary{font-size:20px;font-weight:800}
+.ev-note{font-size:16px}
+.ev-price{font-family:'Archivo Black',Archivo,sans-serif;font-size:58px}
+
+/* ================= Topo: leque de páginas + celular ================= */
+.ev-hero-books{height:580px;max-width:980px;margin:44px auto 34px}
+.ev-main-cover{width:400px;box-shadow:0 26px 70px #00101c88}
+.ev-sheet{width:252px;border:1px solid #b9cfdd}
+.ev-sheet-far-left{left:0;top:38px;transform:rotate(-17deg);z-index:0}
+.ev-sheet-left{left:120px;top:6px;transform:rotate(-9deg);z-index:1}
+.ev-sheet-right{right:120px;top:6px;transform:rotate(9deg);z-index:1}
+.ev-sheet-far-right{right:0;top:38px;transform:rotate(17deg);z-index:0}
+.ev-hero-phone{position:absolute;z-index:3;right:6%;bottom:-10px;width:186px;padding:9px;
+ background:#101d26;border-radius:28px;box-shadow:0 26px 54px #00101caa,0 0 0 2px #ffffff26}
+.ev-hero-phone img{width:100%;height:auto;border-radius:20px;background:#fff;display:block}
+.ev-hero-phone-notch{position:absolute;top:17px;left:50%;transform:translateX(-50%);
+ width:62px;height:7px;border-radius:5px;background:#000;z-index:2}
+
+@media(max-width:850px){
+ .ev-hero-books{height:470px;max-width:740px}
+ .ev-main-cover{width:330px}
+ .ev-sheet{width:205px}
+ .ev-sheet-left{left:78px}.ev-sheet-right{right:78px}
+ .ev-hero-phone{width:150px;right:2%}
+}
+@media(max-width:600px){
+ .ev-page{font-size:19px}
+ .ev-page h1{font-size:40px;line-height:1.06}
+ .ev-page h2{font-size:31px}
+ .ev-lead{font-size:20px}
+ .ev-cta{font-size:16px}
+ .ev-copy p,.ev-section-head>p:last-child{font-size:19px}
+ .ev-checks li,.ev-numbered p{font-size:18px}
+ .ev-sample-copy>p:last-child,.ev-modules p,.ev-faq details p{font-size:17px}
+ .ev-faq summary{font-size:18px}
+ .ev-price{font-size:46px}
+ /* no celular o leque vira tres pecas: as de fora sairiam da tela */
+ .ev-hero-books{height:330px;max-width:100%;margin:26px auto 22px}
+ .ev-main-cover{width:62%}
+ .ev-sheet{width:40%}
+ .ev-sheet-far-left,.ev-sheet-far-right{display:none}
+ .ev-sheet-left{left:0;top:16px;transform:rotate(-11deg)}
+ .ev-sheet-right{right:0;top:16px;transform:rotate(11deg)}
+ .ev-hero-phone{width:104px;right:0;bottom:-6px;padding:6px;border-radius:18px}
+ .ev-hero-phone img{border-radius:13px}
+ .ev-hero-phone-notch{width:38px;height:5px;top:11px}
+}
+
+.ev-page{overflow-x:clip}
