@@ -2,3 +2,50 @@
 @media(max-width:850px){.ev-samples{grid-template-columns:repeat(2,1fr)}.ev-modules{grid-template-columns:repeat(2,1fr)}.ev-modules p{min-height:80px}.ev-split,.ev-offer{gap:35px}.ev-strip{gap:20px;font-size:9px}.ev-hero-books{max-width:690px;height:450px}.ev-main-cover{width:370px}.ev-sheet{width:255px}.ev-bump{grid-template-columns:240px 1fr;gap:30px}}
 @media(max-width:600px){.ev-wrap{width:calc(100% - 36px)}.ev-top{font-size:8px;letter-spacing:1px}.ev-top span{padding-inline:5px}.ev-nav{padding-block:18px}.ev-brand{font-size:15px}.ev-brand-sub{font-size:8px}.ev-brand-symbol{width:30px;height:30px;font-size:24px}.ev-nav>a:last-child{font-size:11px}.ev-hero{padding-top:25px;padding-bottom:35px}.ev-page h1{font-size:42px;letter-spacing:-1.3px}.ev-page h2{font-size:34px}.ev-kicker{font-size:9px;letter-spacing:1.5px}.ev-lead{font-size:17px}.ev-hero-books{height:300px;margin:22px auto;max-width:390px}.ev-main-cover{width:69%}.ev-sheet{width:47%}.ev-sheet-left{left:3%;transform:rotate(-10deg)}.ev-sheet-right{right:3%;transform:rotate(10deg)}.ev-cta{font-size:12px;padding:16px 13px;gap:10px;min-height:56px}.ev-hero>.ev-cta{width:100%}.ev-page .ev-caption{font-size:10px}.ev-strip{gap:11px;padding:15px 12px;font-size:7px;letter-spacing:0}.ev-strip span:before{margin-right:4px}.ev-section{padding-block:52px}.ev-split,.ev-offer,.ev-bump{grid-template-columns:minmax(0,1fr);gap:32px}.ev-section-head{text-align:left;margin-bottom:28px}.ev-samples{grid-template-columns:1fr;gap:25px}.ev-preview-button{padding:20px 28px 0}.ev-preview-button>span{font-size:10px}.ev-sample-copy{padding:24px}.ev-filters{justify-content:flex-start;gap:7px}.ev-filters button{font-size:12px;padding:8px 12px}.ev-page-detail{max-height:510px;max-width:355px;margin:auto;transform:none}.ev-numbered li{gap:16px}.ev-modules{gap:12px}.ev-modules article{padding:18px 14px 0;max-height:365px}.ev-modules article>span{font-size:8px}.ev-modules h3{font-size:22px}.ev-modules p{font-size:14px;min-height:130px}.ev-small-appliances span{font-size:12px;padding:7px 11px}.ev-device{max-width:290px;max-height:440px}.ev-offer>img{width:100%;max-width:330px;margin:auto}.ev-bump>img{max-width:230px;margin:auto}.ev-bump h2{font-size:32px}.ev-dialog-toolbar,.ev-dialog-nav{padding:9px 12px}.ev-faq summary{font-size:17px}.ev-faq details p{font-size:15px}}
 @media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}@media(prefers-reduced-motion:reduce){.ev-preview-button img{transition:none}}
+
+/* ---- Leitura: corpo maior, cinza mais escuro, nada abaixo de 10px ---- */
+.ev-page{font-size:19px;line-height:1.65;--muted:#3d5566}
+.ev-lead{font-size:22px;line-height:1.55}
+.ev-kicker{font-size:12px;letter-spacing:1.8px}
+.ev-top{font-size:12px;letter-spacing:1.6px}
+.ev-strip{font-size:12px;gap:46px}
+.ev-cta{font-size:17px;letter-spacing:.3px;min-height:62px}
+.ev-page .ev-caption{font-size:13px;color:#cfdfea}
+.ev-copy p,.ev-section-head>p:last-child{font-size:19px}
+.ev-checks li{font-size:18px;line-height:1.5}
+.ev-numbered p{font-size:18px}
+.ev-sample-copy>p:last-child,.ev-modules p,.ev-faq details p{font-size:17px;line-height:1.52}
+.ev-modules article>span,.ev-preview-button>span{font-size:11px}
+.ev-note{font-size:15px;line-height:1.5}
+.ev-footer p{font-size:13px;line-height:1.55}
+.ev-faq summary{font-size:19px}
+.ev-small-appliances span{font-size:15px}
+.ev-filters button{font-size:14px}
+
+/* ---- Entrada dos blocos: sobem e deslizam ao aparecer na tela ---- */
+.ev-reveal{opacity:0;transform:translateY(36px);
+ transition:opacity .64s cubic-bezier(.2,.7,.3,1),transform .64s cubic-bezier(.2,.7,.3,1)}
+.ev-reveal-l{transform:translate3d(-52px,16px,0)}
+.ev-reveal-r{transform:translate3d(52px,16px,0)}
+.ev-reveal.ev-in{opacity:1;transform:none}
+
+@media(max-width:600px){
+ .ev-page{font-size:18px}
+ .ev-lead{font-size:19px}
+ .ev-top{font-size:10px;letter-spacing:.8px}
+ .ev-strip{font-size:10px;letter-spacing:.2px;gap:12px}
+ .ev-cta{font-size:15px;padding:18px 14px;min-height:60px}
+ .ev-kicker{font-size:11px;letter-spacing:1.2px}
+ .ev-copy p,.ev-section-head>p:last-child{font-size:18px}
+ .ev-modules article>span{font-size:10px}
+ .ev-modules p{font-size:16px}
+ .ev-small-appliances span{font-size:14px}
+ .ev-page .ev-caption{font-size:12px}
+ /* deslocamento lateral menor no celular, para não gerar rolagem horizontal */
+ .ev-reveal-l{transform:translate3d(-24px,16px,0)}
+ .ev-reveal-r{transform:translate3d(24px,16px,0)}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .ev-reveal,.ev-reveal-l,.ev-reveal-r{opacity:1!important;transform:none!important;transition:none}
+}
