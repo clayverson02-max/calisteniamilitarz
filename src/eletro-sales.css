@@ -116,3 +116,34 @@
 }
 
 .ev-page{overflow-x:clip}
+
+/* ============ Contraste: nada de cinza em fundo claro ============ */
+.ev-page{--muted:#101a22;--blue-text:#05627f}
+.ev-white,.ev-pale{color:#0c151c}
+.ev-copy p,.ev-section-head>p:last-child,.ev-sample-copy>p:last-child,
+.ev-modules p,.ev-faq details p,.ev-small-appliances p,.ev-bump p,
+.ev-pale p,.ev-white p{color:#101a22}
+.ev-white .ev-kicker,.ev-pale .ev-kicker,.ev-modules article>span,
+.ev-white em,.ev-pale em,.ev-faq summary span{color:var(--blue-text)}
+.ev-checks li:before{color:var(--blue-text)}
+.ev-highlight{color:#0c151c!important;border-left-width:6px;border-left-color:var(--blue-text)}
+.ev-note{color:#101a22;font-weight:600;background:#e9f3f8;border-left:6px solid var(--blue-text);
+ padding:16px 18px;border-radius:0 10px 10px 0}
+.ev-small-appliances span{color:#0c151c;border-color:#9bb6c6;font-weight:600}
+.ev-filters button{color:#0c151c;border-color:#8fadbe;font-weight:700}
+
+/* Em fundo escuro, claro de verdade */
+.ev-lead{color:#fff}
+.ev-page .ev-caption{color:#eaf3f9;font-weight:600}
+.ev-navy .ev-numbered p{color:#eef5fa}
+.ev-footer p{color:#dfecf4}
+.ev-top,.ev-strip{color:#fff}
+.ev-pending p{color:#e7f0f6}
+
+/* ============ Empilha mais cedo, para o celular grande ============ */
+@media(max-width:820px){
+ .ev-split,.ev-offer,.ev-bump{grid-template-columns:minmax(0,1fr);gap:34px}
+ .ev-page-detail{max-width:420px;margin-inline:auto;transform:none}
+ .ev-offer>img,.ev-bump>img{max-width:340px;margin-inline:auto}
+ .ev-section-head{text-align:left}
+}
