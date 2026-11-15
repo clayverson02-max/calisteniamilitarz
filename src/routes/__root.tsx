@@ -94,8 +94,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Desafío de Calistenia Militar" },
-      { name: "description", content: "Físico marcado en 21 días sin salir de casa." },
+      { title: "Calistenia Militar — 350 Exercícios" },
+      { name: "description", content: "350 exercícios organizados por dia e grupo muscular. Treine em casa ou ao ar livre." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -123,7 +123,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="es">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
