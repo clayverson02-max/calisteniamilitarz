@@ -115,7 +115,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://connect.facebook.net" },
     ],
-    scripts: [{ children: META_PIXEL }],
+    scripts: [
+      { children: META_PIXEL },
+      // UTMify: repassa as UTMs da URL para o checkout
+      {
+        src: "https://cdn.utmify.com.br/scripts/utms/latest.js",
+        async: true,
+        defer: true,
+        "data-utmify-prevent-xcod-sck": "",
+        "data-utmify-prevent-subids": "",
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
