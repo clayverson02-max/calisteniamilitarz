@@ -2,6 +2,21 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 import { track } from '@/lib/pixel';
 import '../eletro-sales.css';
+import refri1 from '@/assets/refrigeracao/pagina-1.webp.asset.json';
+import refri6 from '@/assets/refrigeracao/pagina-6.webp.asset.json';
+import refri8 from '@/assets/refrigeracao/pagina-8.webp.asset.json';
+import refri28 from '@/assets/refrigeracao/pagina-28.webp.asset.json';
+import refri31 from '@/assets/refrigeracao/pagina-31.webp.asset.json';
+import refri58 from '@/assets/refrigeracao/pagina-58.webp.asset.json';
+
+const refriPages = [
+  { src: refri1.url, t: 'Capa do módulo' },
+  { src: refri6.url, t: 'Ciclo de refrigeração' },
+  { src: refri8.url, t: 'Compressor hermético' },
+  { src: refri28.url, t: 'Uso do multímetro' },
+  { src: refri31.url, t: 'Geladeira não liga' },
+  { src: refri58.url, t: 'Fluxograma de diagnóstico' },
+];
 
 // Oferta principal na Cakto (produto 4q8hAqE, checkout 1327167).
 const CHECKOUT_URL: string = 'https://pay.cakto.com.br/mx6odts_1327167';
@@ -98,6 +113,7 @@ export function EletroSales() {
     <div className="ev-strip"><span>COMPONENTES IDENTIFICADOS</span><span>SEQUÊNCIA DE OBSERVAÇÃO</span><span>LIMITES DE SEGURANÇA</span></div>
     <section className="ev-section ev-white"><div className="ev-wrap ev-split"><div><p className="ev-kicker">ANTES DE TROCAR UMA PEÇA</p><h2>Trocar peça por palpite<br/><em>sai caro duas vezes.</em></h2></div><div className="ev-copy"><p>A lavadora não centrifuga. A geladeira não gela. O forno liga e não esquenta.</p><p>Você assiste a um vídeo, compra a peça que ele mandou comprar, e o problema continua. Perdeu o dinheiro da peça e ainda não sabe o que era.</p><p className="ev-highlight">O mesmo sintoma tem causas diferentes. O guia organiza o começo: o que olhar, em que ordem, e onde parar.</p></div></div></section>
     <section id="por-dentro" className="ev-section ev-pale"><div className="ev-wrap"><div className="ev-section-head"><p className="ev-kicker">VEJA O FORMATO DO MATERIAL</p><h2>Abra uma página.<br/>Veja a diferença de aprender visualmente.</h2><p>Toque nas prévias para ampliar. São páginas demonstrativas criadas para esta edição, com desenhos, orientação de leitura e cuidados específicos.</p></div><div className="ev-filters" aria-label="Filtrar prévias">{categories.map(c=><button key={c} aria-pressed={category===c} onClick={()=>setCategory(c)}>{c}</button>)}</div><div className="ev-samples">{samples.map((s,i)=>(category==='Todos'||s.category===category)&&<article className="ev-sample" key={s.id}><button className="ev-preview-button" onClick={()=>openSample(i)} aria-label={`Ampliar página: ${s.label}`}><img src={`/guia/${s.id}.svg`} alt={`Prévia de ${s.label}: ${s.title}`} width="900" height="1200" loading="lazy"/><span>AMPLIAR PÁGINA <b aria-hidden="true">＋</b></span></button><div className="ev-sample-copy"><p className="ev-kicker">{s.label}</p><h3>{s.title}</h3><p>{s.detail}</p></div></article>)}</div></div></section>
+    <section className="ev-section ev-white"><div className="ev-wrap"><div className="ev-section-head"><p className="ev-kicker">PRÉVIA REAL DO MÓDULO DE REFRIGERAÇÃO</p><h2>Páginas de verdade.<br/><em>Do jeito que você vai receber.</em></h2><p>Algumas páginas do material completo, com mais de 90 páginas ilustradas só sobre geladeiras e refrigeradores.</p></div><div className="ev-refri-grid">{refriPages.map((r,i)=><figure key={r.t} className="ev-refri-page" style={{['--tilt' as string]:`${[-2,1.5,-1,2,-1.5,1][i]}deg`}}><img src={r.src} alt={`Página do guia: ${r.t}`} width="910" height="1286" loading="lazy"/><figcaption>{r.t}</figcaption></figure>)}</div><p className="ev-refri-more">+ de 90 páginas como estas no material completo</p><a className="ev-cta" href="#oferta">QUERO TODAS AS PÁGINAS <span aria-hidden="true">↓</span></a></div></section>
     <section className="ev-section ev-navy"><div className="ev-wrap ev-split"><div className="ev-page-detail"><img src="/guia/lavadora.svg" alt="Diagrama com componentes da lavadora identificados por números" width="900" height="1200" loading="lazy"/></div><div><p className="ev-kicker">UMA ESTRUTURA FÁCIL DE CONSULTAR</p><h2>Você vê.<br/>Você entende.<br/><em>Você para de chutar.</em></h2><ol className="ev-numbered"><li><span>01</span><div><h3>Ache a peça no desenho</h3><p>Cada componente aparece numerado, no lugar onde ele está de verdade dentro do aparelho.</p></div></li><li><span>02</span><div><h3>Siga a ordem certa</h3><p>Do mais simples ao mais caro. A maioria das falhas morre nos três primeiros passos.</p></div></li><li><span>03</span><div><h3>Saiba onde parar</h3><p>O guia diz quando o caso é de técnico. Micro-ondas, gás e sistema de refrigeração têm limite claro.</p></div></li></ol><a className="ev-cta" href="#oferta">QUERO O GUIA COMPLETO <span aria-hidden="true">↓</span></a></div></div></section>
     <section id="conteudo" className="ev-section ev-white"><div className="ev-wrap"><div className="ev-section-head"><p className="ev-kicker">UM ÍNDICE QUE PARTE DO APARELHO</p><h2>Da lavanderia à cozinha.<br/>Encontre o assunto que precisa estudar.</h2></div><div className="ev-modules">
       <article><span>01 / LAVANDERIA</span><h3>Lavadoras</h3><p>Funcionamento inicial, enchimento, drenagem, centrifugação, vazamentos e ruídos.</p><img src="/guia/lavadora.svg" alt="Página ilustrada de lavadoras" width="900" height="1200" loading="lazy"/></article>

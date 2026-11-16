@@ -147,3 +147,12 @@
  .ev-offer>img,.ev-bump>img{max-width:340px;margin-inline:auto}
  .ev-section-head{text-align:left}
 }
+
+/* Prévia real das páginas do módulo de refrigeração */
+.ev-refri-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:32px}
+.ev-refri-page{margin:0;transform:rotate(var(--tilt,0deg));transition:transform .3s}
+.ev-refri-page:hover{transform:rotate(0) scale(1.04);z-index:2}
+.ev-refri-page img{display:block;width:100%;height:auto;border-radius:6px;box-shadow:0 18px 40px -14px rgba(10,30,70,.45);background:#fff}
+.ev-refri-page figcaption{margin-top:10px;text-align:center;font-weight:700;font-size:.9rem}
+.ev-refri-more{margin:28px 0 18px;text-align:center;font-weight:800}
+@media (max-width:700px){.ev-refri-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
